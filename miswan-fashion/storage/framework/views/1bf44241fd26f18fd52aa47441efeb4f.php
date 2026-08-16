@@ -1,0 +1,133 @@
+<?php $__env->startSection('title', 'Admin Dashboard'); ?>
+<?php $__env->startSection('page_title', 'Analytics & Store Overview'); ?>
+
+<?php $__env->startSection('admin_content'); ?>
+<!-- Metrics Overview -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm rounded-lg p-3 bg-white border-left border-primary" style="border-left-width: 4px !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted small mb-1">TOTAL REVENUE</h6>
+                    <h4 class="font-weight-bold text-dark m-0">TK <?php echo e(number_format($totalRevenue)); ?></h4>
+                </div>
+                <div class="bg-light text-primary rounded p-3"><i class="fa fa-money fa-2x"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm rounded-lg p-3 bg-white border-left border-success" style="border-left-width: 4px !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted small mb-1">TOTAL ORDERS</h6>
+                    <h4 class="font-weight-bold text-dark m-0"><?php echo e($totalOrders); ?></h4>
+                </div>
+                <div class="bg-light text-success rounded p-3"><i class="fa fa-shopping-cart fa-2x"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm rounded-lg p-3 bg-white border-left border-info" style="border-left-width: 4px !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted small mb-1">TOTAL PRODUCTS</h6>
+                    <h4 class="font-weight-bold text-dark m-0"><?php echo e($totalProducts); ?></h4>
+                </div>
+                <div class="bg-light text-info rounded p-3"><i class="fa fa-cube fa-2x"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm rounded-lg p-3 bg-white border-left border-warning" style="border-left-width: 4px !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted small mb-1">TOTAL USERS</h6>
+                    <h4 class="font-weight-bold text-dark m-0"><?php echo e($totalUsers); ?></h4>
+                </div>
+                <div class="bg-light text-warning rounded p-3"><i class="fa fa-users fa-2x"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Status Metrics -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-2">
+        <div class="card border-0 shadow-sm rounded-lg p-3 bg-warning text-dark">
+            <h6 class="m-0 font-weight-bold"><i class="fa fa-clock-o mr-1"></i> Pending Orders: <?php echo e($pendingOrders); ?></h6>
+        </div>
+    </div>
+    <div class="col-md-4 mb-2">
+        <div class="card border-0 shadow-sm rounded-lg p-3 bg-info text-white">
+            <h6 class="m-0 font-weight-bold"><i class="fa fa-cogs mr-1"></i> Processing Orders: <?php echo e($processingOrders); ?></h6>
+        </div>
+    </div>
+    <div class="col-md-4 mb-2">
+        <div class="card border-0 shadow-sm rounded-lg p-3 bg-success text-white">
+            <h6 class="m-0 font-weight-bold"><i class="fa fa-check-circle mr-1"></i> Delivered Orders: <?php echo e($deliveredOrders); ?></h6>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Orders Table -->
+<div class="card border-0 shadow-sm rounded-lg p-4 bg-white">
+    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+        <h5 class="font-weight-bold text-dark m-0">Recent Customer Orders</h5>
+        <a href="<?php echo e(route('admin.orders.index')); ?>" class="btn btn-sm btn-outline-primary">View All Orders</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead class="thead-light">
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>District</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th class="text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $__empty_1 = true; $__currentLoopData = $recentOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <tr>
+                        <td class="font-weight-bold text-dark"><?php echo e($order->order_number); ?></td>
+                        <td><?php echo e($order->customer_name); ?></td>
+                        <td><?php echo e($order->phone); ?></td>
+                        <td><?php echo e($order->district); ?></td>
+                        <td class="font-weight-bold text-primary">TK <?php echo e(number_format($order->grand_total)); ?></td>
+                        <td>
+                            <?php if($order->order_status == 'Delivered'): ?>
+                                <span class="badge badge-success">Delivered</span>
+                            <?php elseif($order->order_status == 'Shipped'): ?>
+                                <span class="badge badge-info">Shipped</span>
+                            <?php elseif($order->order_status == 'Processing'): ?>
+                                <span class="badge badge-warning">Processing</span>
+                            <?php elseif($order->order_status == 'Cancelled'): ?>
+                                <span class="badge badge-danger">Cancelled</span>
+                            <?php else: ?>
+                                <span class="badge badge-secondary">Pending</span>
+                            <?php endif; ?>
+                        </td>
+                        <td><span class="badge badge-light border"><?php echo e($order->payment_method); ?></span></td>
+                        <td class="text-right">
+                            <a href="<?php echo e(route('admin.orders.show', $order->id)); ?>" class="btn btn-sm btn-primary">Manage</a>
+                        </td>
+                    </tr>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">No orders available yet.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Volumes/2BT/Ridoy/miswan-ashion/resources/views/admin/dashboard.blade.php ENDPATH**/ ?>
