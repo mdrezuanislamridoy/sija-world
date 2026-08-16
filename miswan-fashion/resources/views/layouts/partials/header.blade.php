@@ -48,11 +48,9 @@
                     <div class="bar-line"></div>
                 </button>
 
-                <!-- Center Logo (Text Brand) -->
-                <a href="{{ url('/') }}" class="logo text-center text-decoration-none">
-                    <span class="font-weight-bold text-uppercase" style="font-size: 22px; color: #e53131; letter-spacing: 0.5px;">
-                        {{ $globalSetting->site_name ?? 'SIJA WORLD' }}
-                    </span>
+                <!-- Center Logo -->
+                <a href="{{ url('/') }}" class="logo text-center d-inline-block">
+                    <img src="{{ asset($globalSetting->logo ?? 'assets/images/logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 48px; width: auto;">
                 </a>
 
                 <!-- Right Shopping Bag with Red Badge -->
@@ -68,12 +66,10 @@
 
             <!-- Desktop Row (d-none d-md-flex) -->
             <div class="row align-items-center d-none d-md-flex">
-                <!-- Logo (Text Brand) -->
+                <!-- Logo -->
                 <div class="col-md-3">
-                    <a href="{{ url('/') }}" class="logo text-decoration-none d-inline-block">
-                        <span class="font-weight-bold text-uppercase" style="font-size: 26px; color: #e53131; letter-spacing: 1px; line-height: 1;">
-                            SIJA <span style="color: #1a202c;">WORLD</span>
-                        </span>
+                    <a href="{{ url('/') }}" class="logo d-inline-block">
+                        <img src="{{ asset($globalSetting->logo ?? 'assets/images/logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 52px; width: auto;" class="site-logo">
                     </a>
                 </div>
 
