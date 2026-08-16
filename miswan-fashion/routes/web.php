@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminSettingController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,30 +84,48 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['admin.auth'])->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // Products CRUD
-        Route::resource('products', AdminProductController::class);
+        // Products CRUD (Permission: manage_products)
+        Route::middleware(['admin.permission:manage_products'])->group(function () {
+            Route::resource('products', AdminProductController::class);
+        });
 
-        // Orders Management
-        Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
-        Route::get('/orders/{id}', [AdminOrderController::class, 'show'])->name('orders.show');
-        Route::post('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
-        Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+        // Orders Management (Permission: manage_orders)
+        Route::middleware(['admin.permission:manage_orders'])->group(function () {
+            Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+            Route::get('/orders/{id}', [AdminOrderController::class, 'show'])->name('orders.show');
+            Route::post('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
+            Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+        });
 
-        // Categories Management
-        Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
-        Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
-        Route::put('/categories/{id}', [AdminCategoryController::class, 'update'])->name('categories.update');
-        Route::delete('/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+        // Categories Management (Permission: manage_categories)
+        Route::middleware(['admin.permission:manage_categories'])->group(function () {
+            Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+            Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+            Route::put('/categories/{id}', [AdminCategoryController::class, 'update'])->name('categories.update');
+            Route::delete('/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+        });
 
-        // Sliders & Banners
-        Route::get('/sliders', [AdminSliderController::class, 'index'])->name('sliders.index');
-        Route::post('/sliders', [AdminSliderController::class, 'storeSlider'])->name('sliders.store');
-        Route::delete('/sliders/{id}', [AdminSliderController::class, 'destroySlider'])->name('sliders.destroy');
-        Route::post('/banners', [AdminSliderController::class, 'storeBanner'])->name('banners.store');
-        Route::delete('/banners/{id}', [AdminSliderController::class, 'destroyBanner'])->name('banners.destroy');
+        // Sliders & Banners (Permission: manage_sliders)
+        Route::middleware(['admin.permission:manage_sliders'])->group(function () {
+            Route::get('/sliders', [AdminSliderController::class, 'index'])->name('sliders.index');
+            Route::post('/sliders', [AdminSliderController::class, 'storeSlider'])->name('sliders.store');
+            Route::delete('/sliders/{id}', [AdminSliderController::class, 'destroySlider'])->name('sliders.destroy');
+            Route::post('/banners', [AdminSliderController::class, 'storeBanner'])->name('banners.store');
+            Route::delete('/banners/{id}', [AdminSliderController::class, 'destroyBanner'])->name('banners.destroy');
+        });
 
-        // General Settings
-        Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
-        Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+        // General Settings (Permission: manage_settings)
+        Route::middleware(['admin.permission:manage_settings'])->group(function () {
+            Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+            Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+        });
+
+        // Admin Staff & Page Permission Management (Permission: manage_admins)
+        Route::middleware(['admin.permission:manage_admins'])->group(function () {
+            Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+            Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+            Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');
+            Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+        });
     });
 });
