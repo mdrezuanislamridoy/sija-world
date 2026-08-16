@@ -6,7 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Control Panel') - SijaWorld</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="{{ asset('assets/ecommerce/dist/css/font-awesome.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/vendor_assets/cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/alertify.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor_assets/cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/default.min.css') }}" />
