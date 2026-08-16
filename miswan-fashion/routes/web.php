@@ -5,8 +5,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\PageController;
 
 use App\Http\Controllers\Admin\AdminAuthController;
@@ -20,7 +18,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - Miswan Fashion Full-Stack Application
+| Web Routes - Miswan Fashion Application (Direct Order Mode)
 |--------------------------------------------------------------------------
 */
 
@@ -30,7 +28,7 @@ Route::get('/search', [ProductController::class, 'search'])->name('products.sear
 Route::get('/product-category/{category}/{subcategory?}', [ProductController::class, 'category'])->name('category.show');
 Route::get('/product/{slug}/{id?}', [ProductController::class, 'show'])->name('product.show');
 
-// --- Cart & Checkout Routes ---
+// --- Cart & Direct Checkout Routes ---
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
@@ -42,7 +40,7 @@ Route::post('/checkout/shipping-cost', [CheckoutController::class, 'getShippingC
 Route::post('/checkout/order', [CheckoutController::class, 'placeOrder'])->name('checkout.order');
 Route::get('/order-success/{order_number}', [CheckoutController::class, 'orderSuccess'])->name('order.success');
 
-// --- Wishlist & Info Routes ---
+// --- Wishlist & Static Page Routes ---
 Route::get('/wishlist', [HomeController::class, 'wishlist'])->name('wishlist.index');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
@@ -51,36 +49,23 @@ Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/track-order', [\App\Http\Controllers\OrderTrackController::class, 'index'])->name('track.order');
 Route::post('/track-order', [\App\Http\Controllers\OrderTrackController::class, 'track'])->name('track.order.post');
 
-// --- Customer Authentication Routes ---
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// --- Redirect Legacy Auth Slugs to Home ---
+Route::get('/login', function () { return redirect()->route('home'); })->name('login');
+Route::get('/register', function () { return redirect()->route('home'); })->name('register');
 
-// --- Customer Account Dashboard ---
-Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::get('/orders', [UserController::class, 'orders'])->name('orders');
-    Route::get('/orders/{order_number}', [UserController::class, 'orderDetails'])->name('orders.details');
-    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
-    Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/password', [UserController::class, 'updatePassword'])->name('password.update');
-});
-
-// --- Admin Panel Routes ---
+// --- Admin Panel Routes (Protected Admin Auth & RBAC) ---
 Route::prefix('admin')->name('admin.')->group(function () {
     // Redirect /admin to dashboard
     Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     });
 
-    // Admin Auth
+    // Admin Authentication Routes
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
-    // Admin Protected Area
+    // Protected Admin Dashboard & Management Area
     Route::middleware(['admin.auth'])->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 

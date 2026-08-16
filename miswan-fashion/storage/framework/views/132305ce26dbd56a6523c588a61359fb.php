@@ -4,9 +4,9 @@
             <!-- Col 1: About & Info -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="footer-widget">
-                    <img src="<?php echo e(asset($globalSetting->logo ?? 'assets/app_assets/image_directory/site/685ed7e04a0218.78429304.png')); ?>" alt="<?php echo e($globalSetting->site_name ?? 'Miswan Fashion'); ?>" style="max-height: 45px;" class="mb-3">
+                    <h3 class="font-weight-bold text-uppercase mb-3" style="color: #e53131; letter-spacing: 1px; font-size: 24px;">SIJA <span class="text-white">WORLD</span></h3>
                     <p class="text-muted" style="font-size: 14px; line-height: 1.6;">
-                        Miswan Fashion is one of Bangladesh’s leading lifestyle brands, providing authentic products, exclusive fragrances, and the trendiest fashion collections with fast nationwide delivery.
+                        Sija World is one of Bangladesh’s leading lifestyle & fashion brands, providing authentic products, exclusive fragrances, and trendiest fashion collections with fast nationwide delivery.
                     </p>
                     <ul class="list-unstyled text-muted" style="font-size: 14px;">
                         <li class="mb-2"><i class="fa fa-map-marker text-primary mr-2"></i> <?php echo e($globalSetting->address ?? 'Dhaka, Bangladesh'); ?></li>
@@ -35,11 +35,10 @@
                 <div class="footer-widget">
                     <h5 class="text-white font-weight-bold mb-3 border-bottom pb-2" style="border-color: rgba(255,255,255,0.1) !important;">Customer Care</h5>
                     <ul class="list-unstyled" style="font-size: 14px; line-height: 2;">
-                        <li><a href="<?php echo e(route('login')); ?>" class="text-muted">My Account</a></li>
-                        <li><a href="<?php echo e(route('user.orders')); ?>" class="text-muted">Order History</a></li>
+                        <li><a href="<?php echo e(route('track.order')); ?>" class="text-muted">Track Order</a></li>
                         <li><a href="<?php echo e(route('wishlist.index')); ?>" class="text-muted">My Wishlist</a></li>
                         <li><a href="<?php echo e(route('cart.index')); ?>" class="text-muted">Shopping Cart</a></li>
-                        <li><a href="<?php echo e(route('checkout.index')); ?>" class="text-muted">Checkout</a></li>
+                        <li><a href="<?php echo e(route('checkout.index')); ?>" class="text-muted">Direct Checkout</a></li>
                     </ul>
                 </div>
             </div>

@@ -71,29 +71,6 @@
                         <a href="{{ $banner->link ?? url('/') }}" class="d-block h-100">
                             <img src="{{ asset($banner->image) }}" alt="{{ $banner->title ?? 'Promo' }}" class="img-fluid w-100 h-100" style="object-fit: cover; transition: transform 0.4s ease;">
                         </a>
-
-                        <!-- Banner Product Overlay -->
-                        @if($banner->product || $banner->title)
-                            <div class="position-absolute p-2 p-md-3 rounded-lg text-white shadow" style="bottom: 12px; left: 12px; right: 12px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px);">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="overflow-hidden mr-2">
-                                        <strong class="d-block text-truncate text-warning" style="font-size: 13px;">{{ $banner->title ?? ($banner->product ? $banner->product->name : '') }}</strong>
-                                        @if($banner->product)
-                                            <span class="small font-weight-bold text-white">TK {{ number_format($banner->product->price) }}</span>
-                                        @endif
-                                    </div>
-                                    @if($banner->product)
-                                        <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark px-2 py-1 ajax-add-to-cart" style="font-size: 12px;" data-product-id="{{ $banner->product->id }}">
-                                            <i class="fa fa-shopping-cart"></i> {{ $banner->button_text ?? 'Buy' }}
-                                        </button>
-                                    @else
-                                        <a href="{{ $banner->link ?? url('/') }}" class="btn btn-sm btn-light font-weight-bold px-2 py-1" style="font-size: 12px;">
-                                            {{ $banner->button_text ?? 'View' }}
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
                     </div>
                     @endforeach
                 @else
@@ -193,33 +170,6 @@
                             <a href="{{ $banner->link ?? url('/') }}" class="d-block">
                                 <img src="{{ asset($banner->image) }}" class="img-fluid w-100" style="transition: transform 0.4s; object-fit: cover; height: 220px;" alt="{{ $banner->title ?? 'Promo Banner' }}">
                             </a>
-
-                            @if($banner->product || $banner->title)
-                                <div class="position-absolute p-3 rounded-lg text-white shadow-lg" style="bottom: 15px; left: 15px; right: 15px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h5 class="m-0 font-weight-bold text-warning" style="font-size: 16px;">{{ $banner->title ?? ($banner->product ? $banner->product->name : 'Special Offer') }}</h5>
-                                            @if($banner->subtitle)
-                                                <small class="text-light d-block">{{ $banner->subtitle }}</small>
-                                            @endif
-                                            @if($banner->product)
-                                                <span class="text-white font-weight-bold mt-1 d-inline-block" style="font-size: 15px;">TK {{ number_format($banner->product->price) }}</span>
-                                            @endif
-                                        </div>
-                                        <div>
-                                            @if($banner->product)
-                                                <button type="button" class="btn btn-warning btn-sm font-weight-bold text-dark px-3 ajax-add-to-cart" data-product-id="{{ $banner->product->id }}">
-                                                    <i class="fa fa-shopping-bag mr-1"></i> {{ $banner->button_text ?? 'Buy Now' }}
-                                                </button>
-                                            @else
-                                                <a href="{{ $banner->link ?? url('/') }}" class="btn btn-light btn-sm font-weight-bold px-3">
-                                                    {{ $banner->button_text ?? 'Shop Collection' }} <i class="fa fa-arrow-right ml-1"></i>
-                                                </a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
                         </div>
                     </div>
                 @endforeach

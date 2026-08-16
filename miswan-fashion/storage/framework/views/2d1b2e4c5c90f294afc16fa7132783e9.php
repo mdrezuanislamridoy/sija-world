@@ -49,9 +49,12 @@
                     <div class="bar-line"></div>
                 </button>
 
-                <!-- Center Logo -->
-                <a href="<?php echo e(url('/')); ?>" class="logo text-center">
-                    <img src="<?php echo e(asset($globalSetting->logo ?? 'assets/app_assets/image_directory/site/685ed7e04a0218.78429304.png')); ?>" alt="<?php echo e($globalSetting->site_name ?? 'Miswan Fashion'); ?>" style="max-height: 42px;">
+                <!-- Center Logo (Text Brand) -->
+                <a href="<?php echo e(url('/')); ?>" class="logo text-center text-decoration-none">
+                    <span class="font-weight-bold text-uppercase" style="font-size: 22px; color: #e53131; letter-spacing: 0.5px;">
+                        <?php echo e($globalSetting->site_name ?? 'SIJA WORLD'); ?>
+
+                    </span>
                 </a>
 
                 <!-- Right Shopping Bag with Red Badge -->
@@ -67,10 +70,12 @@
 
             <!-- Desktop Row (d-none d-md-flex) -->
             <div class="row align-items-center d-none d-md-flex">
-                <!-- Logo -->
+                <!-- Logo (Text Brand) -->
                 <div class="col-md-3">
-                    <a href="<?php echo e(url('/')); ?>" class="logo">
-                        <img src="<?php echo e(asset($globalSetting->logo ?? 'assets/app_assets/image_directory/site/685ed7e04a0218.78429304.png')); ?>" alt="<?php echo e($globalSetting->site_name ?? 'Miswan Fashion'); ?>" class="site-logo" style="max-height: 48px;">
+                    <a href="<?php echo e(url('/')); ?>" class="logo text-decoration-none d-inline-block">
+                        <span class="font-weight-bold text-uppercase" style="font-size: 26px; color: #e53131; letter-spacing: 1px; line-height: 1;">
+                            SIJA <span style="color: #1a202c;">WORLD</span>
+                        </span>
                     </a>
                 </div>
 
