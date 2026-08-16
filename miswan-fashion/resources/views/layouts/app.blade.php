@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', $globalSetting->site_title ?? 'Miswanfashion | Bangladesh’s Leading Fashion Brand')</title>
-    <meta name="description" content="@yield('meta_description', 'Miswanfashion - Bangladesh\'s Leading Lifestyle & Fashion Brand')">
+    <title>@yield('title', $globalSetting->site_title ?? 'Sija World | Bangladesh’s Leading Fashion Brand')</title>
+    <meta name="description" content="@yield('meta_description', 'Sija World - Bangladesh\'s Leading Lifestyle & Fashion Brand')">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset($globalSetting->favicon ?? 'assets/app_assets/image_directory/site/685ed7e04a0218.78429304.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/png">
 
     <!-- Fonts & Core Stylesheets -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
