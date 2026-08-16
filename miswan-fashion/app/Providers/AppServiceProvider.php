@@ -25,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        if (request()->server('HTTP_X_FORWARDED_PROTO') == 'https' || request()->isSecure() || env('APP_ENV') === 'production' || (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'infinityfree'))) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Share global categories and settings across all views if database tables exist
         try {
             if (Schema::hasTable('categories') && Schema::hasTable('settings')) {
