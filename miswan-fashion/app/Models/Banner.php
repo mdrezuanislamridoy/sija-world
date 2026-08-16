@@ -11,9 +11,17 @@ class Banner extends Model
 
     protected $fillable = [
         'title',
+        'subtitle',
         'position',
         'link',
+        'product_id',
+        'button_text',
         'image',
         'status',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

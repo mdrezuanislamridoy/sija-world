@@ -13,8 +13,15 @@ class Slider extends Model
         'title',
         'subtitle',
         'link',
+        'product_id',
         'image',
         'sort_order',
+        'button_text',
         'status',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

@@ -12,17 +12,19 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $sliders = Slider::where('status', 1)->orderBy('sort_order', 'asc')->get();
+        $sliders = Slider::with('product')->where('status', 1)->orderBy('sort_order', 'asc')->get();
         $categories = Category::where('status', 1)->orderBy('priority', 'asc')->get();
         $bestSellingProducts = Product::where('status', 1)->where('is_bestseller', 1)->latest()->take(10)->get();
         $featuredProducts = Product::where('status', 1)->where('is_featured', 1)->latest()->take(10)->get();
-        $middleBanners = Banner::where('status', 1)->where('position', 'middle_banner')->take(2)->get();
+        $topBanners = Banner::with('product')->where('status', 1)->where('position', 'top_banner')->latest()->take(2)->get();
+        $middleBanners = Banner::with('product')->where('status', 1)->where('position', 'middle_banner')->latest()->take(2)->get();
 
         return view('frontend.index', compact(
             'sliders',
             'categories',
             'bestSellingProducts',
             'featuredProducts',
+            'topBanners',
             'middleBanners'
         ));
     }
