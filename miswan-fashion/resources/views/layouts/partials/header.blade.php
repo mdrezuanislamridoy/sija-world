@@ -50,7 +50,7 @@
 
                 <!-- Center Logo -->
                 <a href="{{ url('/') }}" class="logo text-center d-inline-block">
-                    <img src="{{ asset($globalSetting->logo ?? 'assets/images/logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 48px; width: auto;">
+                    <img src="{{ asset($globalSetting->logo ?? 'logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 48px; width: auto;">
                 </a>
 
                 <!-- Right Shopping Bag with Red Badge -->
@@ -69,7 +69,7 @@
                 <!-- Logo -->
                 <div class="col-md-3">
                     <a href="{{ url('/') }}" class="logo d-inline-block">
-                        <img src="{{ asset($globalSetting->logo ?? 'assets/images/logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 52px; width: auto;" class="site-logo">
+                        <img src="{{ asset($globalSetting->logo ?? 'logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 52px; width: auto;" class="site-logo">
                     </a>
                 </div>
 

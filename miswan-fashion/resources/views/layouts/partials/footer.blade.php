@@ -4,7 +4,7 @@
             <!-- Col 1: About & Info -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="footer-widget">
-                    <img src="{{ asset($globalSetting->logo ?? 'assets/images/logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 48px; width: auto;" class="mb-3">
+                    <img src="{{ asset($globalSetting->logo ?? 'logo.png') }}" alt="{{ $globalSetting->site_name ?? 'Sija World' }}" style="max-height: 48px; width: auto;" class="mb-3">
                     <p class="text-muted" style="font-size: 14px; line-height: 1.6;">
                         Sija World is one of Bangladesh’s leading lifestyle & fashion brands, providing authentic products, exclusive fragrances, and trendiest fashion collections with fast nationwide delivery.
                     </p>
