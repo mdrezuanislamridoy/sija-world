@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', $globalSetting->site_title ?? 'Miswanfashion | Bangladesh’s Leading Fashion Brand'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -10,10 +12,48 @@
             <div class="main-slider-area h-100">
                 <div id="heroCarousel" class="owl-carousel owl-theme hero-slider h-100 rounded-lg overflow-hidden shadow-sm" style="border-radius: 12px !important;">
                     <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="item h-100">
+                        <div class="item h-100 position-relative">
                             <a href="<?php echo e($slider->link ?? url('/')); ?>" class="d-block h-100">
                                 <img src="<?php echo e(asset($slider->image)); ?>" class="d-block w-100 img-fluid" style="height: 420px; object-fit: cover;" alt="<?php echo e($slider->title ?? 'Banner'); ?>">
                             </a>
+
+                            <!-- Dynamic Product Purchase Overlay on Hero Slider -->
+                            <?php if($slider->product || $slider->title || $slider->subtitle): ?>
+                                <div class="carousel-caption-overlay position-absolute p-3 p-md-4 rounded-lg shadow-lg text-white" style="left: 20px; bottom: 20px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); max-width: 440px; text-align: left; border: 1px solid rgba(255,255,255,0.15); z-index: 10;">
+                                    <?php if($slider->title): ?>
+                                        <h4 class="font-weight-bold mb-1 text-warning" style="font-size: 20px;"><?php echo e($slider->title); ?></h4>
+                                    <?php endif; ?>
+                                    <?php if($slider->subtitle): ?>
+                                        <p class="small mb-2 text-light"><?php echo e($slider->subtitle); ?></p>
+                                    <?php endif; ?>
+
+                                    <?php if($slider->product): ?>
+                                        <div class="d-flex align-items-center justify-content-between pt-2 border-top border-secondary mt-2">
+                                            <div>
+                                                <span class="d-block text-truncate font-weight-bold text-white" style="max-width: 200px; font-size: 14px;"><?php echo e($slider->product->name); ?></span>
+                                                <span class="text-warning font-weight-bold" style="font-size: 16px;">
+                                                    <?php echo e($globalSetting->currency_symbol ?? 'TK'); ?> <?php echo e(number_format($slider->product->price)); ?>
+
+                                                </span>
+                                                <?php if($slider->product->previous_price && $slider->product->previous_price > $slider->product->price): ?>
+                                                    <small class="text-muted text-decoration-line-through ml-1"><del><?php echo e($globalSetting->currency_symbol ?? 'TK'); ?> <?php echo e(number_format($slider->product->previous_price)); ?></del></small>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <a href="<?php echo e(route('product.show', ['slug' => $slider->product->slug, 'id' => $slider->product->id])); ?>" class="btn btn-sm btn-outline-light font-weight-bold mr-1">View</a>
+                                                <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark ajax-add-to-cart" data-product-id="<?php echo e($slider->product->id); ?>">
+                                                    <i class="fa fa-shopping-bag mr-1"></i> <?php echo e($slider->button_text ?? 'Buy Now'); ?>
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    <?php elseif($slider->link): ?>
+                                        <a href="<?php echo e($slider->link); ?>" class="btn btn-sm btn-warning font-weight-bold text-dark mt-2">
+                                            <?php echo e($slider->button_text ?? 'Shop Now'); ?> <i class="fa fa-arrow-right ml-1"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
@@ -24,11 +64,41 @@
         <!-- Side Banners (Right) -->
         <div class="col-lg-4 d-none d-lg-block">
             <div class="d-flex flex-column justify-content-between h-100">
-                <?php if(isset($middleBanners) && $middleBanners->count() > 0): ?>
-                    <?php $__currentLoopData = $middleBanners->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e($banner->link ?? url('/')); ?>" class="d-block rounded-lg overflow-hidden shadow-sm position-relative <?php echo e($index === 0 ? 'mb-3' : ''); ?> promo-hover-zoom" style="border-radius: 12px !important;">
-                        <img src="<?php echo e(asset($banner->image)); ?>" alt="<?php echo e($banner->title ?? 'Promo'); ?>" class="img-fluid w-100" style="height: 202px; object-fit: cover; transition: transform 0.4s ease;">
-                    </a>
+                <?php
+                    $activeSideBanners = (isset($topBanners) && $topBanners->count() > 0) ? $topBanners : ((isset($middleBanners) && $middleBanners->count() > 0) ? $middleBanners->take(2) : collect([]));
+                ?>
+                <?php if($activeSideBanners->count() > 0): ?>
+                    <?php $__currentLoopData = $activeSideBanners->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="position-relative rounded-lg overflow-hidden shadow-sm <?php echo e($index === 0 ? 'mb-3' : ''); ?> promo-hover-zoom" style="border-radius: 12px !important; height: 202px;">
+                        <a href="<?php echo e($banner->link ?? url('/')); ?>" class="d-block h-100">
+                            <img src="<?php echo e(asset($banner->image)); ?>" alt="<?php echo e($banner->title ?? 'Promo'); ?>" class="img-fluid w-100 h-100" style="object-fit: cover; transition: transform 0.4s ease;">
+                        </a>
+
+                        <!-- Banner Product Overlay -->
+                        <?php if($banner->product || $banner->title): ?>
+                            <div class="position-absolute p-2 p-md-3 rounded-lg text-white shadow" style="bottom: 12px; left: 12px; right: 12px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px);">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="overflow-hidden mr-2">
+                                        <strong class="d-block text-truncate text-warning" style="font-size: 13px;"><?php echo e($banner->title ?? ($banner->product ? $banner->product->name : '')); ?></strong>
+                                        <?php if($banner->product): ?>
+                                            <span class="small font-weight-bold text-white">TK <?php echo e(number_format($banner->product->price)); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php if($banner->product): ?>
+                                        <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark px-2 py-1 ajax-add-to-cart" style="font-size: 12px;" data-product-id="<?php echo e($banner->product->id); ?>">
+                                            <i class="fa fa-shopping-cart"></i> <?php echo e($banner->button_text ?? 'Buy'); ?>
+
+                                        </button>
+                                    <?php else: ?>
+                                        <a href="<?php echo e($banner->link ?? url('/')); ?>" class="btn btn-sm btn-light font-weight-bold px-2 py-1" style="font-size: 12px;">
+                                            <?php echo e($banner->button_text ?? 'View'); ?>
+
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php else: ?>
                     <!-- Fallback placeholder if no banners exist -->
@@ -123,9 +193,39 @@
             <div class="row">
                 <?php $__currentLoopData = $middleBanners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="col-md-6 mb-3">
-                        <a href="<?php echo e($banner->link ?? url('/')); ?>" class="d-block overflow-hidden rounded shadow-sm">
-                            <img src="<?php echo e(asset($banner->image)); ?>" class="img-fluid w-100" style="transition: transform 0.4s; object-fit: cover;" alt="<?php echo e($banner->title ?? 'Promo Banner'); ?>">
-                        </a>
+                        <div class="position-relative overflow-hidden rounded-lg shadow-sm promo-hover-zoom" style="border-radius: 12px !important; min-height: 180px;">
+                            <a href="<?php echo e($banner->link ?? url('/')); ?>" class="d-block">
+                                <img src="<?php echo e(asset($banner->image)); ?>" class="img-fluid w-100" style="transition: transform 0.4s; object-fit: cover; height: 220px;" alt="<?php echo e($banner->title ?? 'Promo Banner'); ?>">
+                            </a>
+
+                            <?php if($banner->product || $banner->title): ?>
+                                <div class="position-absolute p-3 rounded-lg text-white shadow-lg" style="bottom: 15px; left: 15px; right: 15px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="m-0 font-weight-bold text-warning" style="font-size: 16px;"><?php echo e($banner->title ?? ($banner->product ? $banner->product->name : 'Special Offer')); ?></h5>
+                                            <?php if($banner->subtitle): ?>
+                                                <small class="text-light d-block"><?php echo e($banner->subtitle); ?></small>
+                                            <?php endif; ?>
+                                            <?php if($banner->product): ?>
+                                                <span class="text-white font-weight-bold mt-1 d-inline-block" style="font-size: 15px;">TK <?php echo e(number_format($banner->product->price)); ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div>
+                                            <?php if($banner->product): ?>
+                                                <button type="button" class="btn btn-warning btn-sm font-weight-bold text-dark px-3 ajax-add-to-cart" data-product-id="<?php echo e($banner->product->id); ?>">
+                                                    <i class="fa fa-shopping-bag mr-1"></i> <?php echo e($banner->button_text ?? 'Buy Now'); ?>
+
+                                                </button>
+                                            <?php else: ?>
+                                                <a href="<?php echo e($banner->link ?? url('/')); ?>" class="btn btn-light btn-sm font-weight-bold px-3">
+                                                    <?php echo e($banner->button_text ?? 'Shop Collection'); ?> <i class="fa fa-arrow-right ml-1"></i>
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
@@ -153,7 +253,7 @@
                                         <?php endif; ?>
                                     </div>
                                     <h2 class="title text-center text-dark font-weight-bold text-truncate m-0 mb-1" style="font-size: 14px;"><?php echo e($prod->name); ?></h2>
-                                    
+
                                     <div class="price price-center text-center mb-2">
                                         <span class="price-sign text-primary font-weight-bold"><?php echo e($globalSetting->currency_symbol ?? 'TK'); ?> <?php echo e(number_format($prod->price)); ?></span>
                                         <?php if($prod->previous_price && $prod->previous_price > $prod->price): ?>

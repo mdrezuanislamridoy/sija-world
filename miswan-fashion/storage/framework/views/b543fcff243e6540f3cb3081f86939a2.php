@@ -55,6 +55,10 @@
     <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
 <body>
+    <?php
+        $currentAdmin = Auth::guard('admin')->user();
+    ?>
+
     <!-- Sidebar -->
     <aside class="admin-sidebar shadow">
         <div class="p-3 text-center border-bottom border-secondary mb-3">
@@ -69,31 +73,55 @@
                     <i class="fa fa-tachometer"></i> Dashboard
                 </a>
             </li>
+
+            <?php if($currentAdmin && $currentAdmin->hasPermission('manage_orders')): ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.orders*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.orders.index')); ?>">
                     <i class="fa fa-shopping-cart"></i> Manage Orders
                 </a>
             </li>
+            <?php endif; ?>
+
+            <?php if($currentAdmin && $currentAdmin->hasPermission('manage_products')): ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.products*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.products.index')); ?>">
                     <i class="fa fa-cube"></i> Products Catalog
                 </a>
             </li>
+            <?php endif; ?>
+
+            <?php if($currentAdmin && $currentAdmin->hasPermission('manage_categories')): ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.categories*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.categories.index')); ?>">
                     <i class="fa fa-folder-open"></i> Categories
                 </a>
             </li>
+            <?php endif; ?>
+
+            <?php if($currentAdmin && $currentAdmin->hasPermission('manage_sliders')): ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.sliders*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.sliders.index')); ?>">
                     <i class="fa fa-picture-o"></i> Sliders & Banners
                 </a>
             </li>
+            <?php endif; ?>
+
+            <?php if($currentAdmin && $currentAdmin->hasPermission('manage_settings')): ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.settings*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.settings.index')); ?>">
                     <i class="fa fa-cogs"></i> General Settings
                 </a>
             </li>
+            <?php endif; ?>
+
+            <?php if($currentAdmin && $currentAdmin->hasPermission('manage_admins')): ?>
+            <li class="nav-item">
+                <a class="nav-link <?php echo e(request()->routeIs('admin.users*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.users.index')); ?>">
+                    <i class="fa fa-users-cog"></i> Admin Staff & Roles
+                </a>
+            </li>
+            <?php endif; ?>
+
             <li class="nav-item mt-4">
                 <a class="nav-link text-info" href="<?php echo e(url('/')); ?>" target="_blank">
                     <i class="fa fa-external-link"></i> Visit Website
@@ -108,7 +136,15 @@
         <header class="admin-topbar d-flex justify-content-between align-items-center">
             <h5 class="m-0 font-weight-bold text-dark"><?php echo $__env->yieldContent('page_title', 'Dashboard'); ?></h5>
             <div class="d-flex align-items-center">
-                <span class="mr-3 text-muted small"><i class="fa fa-user-circle mr-1"></i> <?php echo e(Auth::guard('admin')->user()->name ?? 'Administrator'); ?></span>
+                <span class="mr-3 text-dark small">
+                    <i class="fa fa-user-circle text-primary mr-1"></i>
+                    <strong><?php echo e($currentAdmin->name ?? 'Administrator'); ?></strong>
+                    <?php if($currentAdmin && $currentAdmin->isSuperAdmin()): ?>
+                        <span class="badge badge-primary ml-1">Superadmin</span>
+                    <?php else: ?>
+                        <span class="badge badge-info ml-1">Sub-Admin</span>
+                    <?php endif; ?>
+                </span>
                 <form method="POST" action="<?php echo e(route('admin.logout')); ?>" class="m-0">
                     <?php echo csrf_field(); ?>
                     <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-sign-out"></i> Logout</button>
