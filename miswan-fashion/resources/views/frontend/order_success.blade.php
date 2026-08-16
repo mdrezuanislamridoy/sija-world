@@ -1,0 +1,126 @@
+@extends('layouts.app')
+
+@section('title', 'Order Placed Successfully #' . $order->order_number . ' - ' . ($globalSetting->site_name ?? 'Miswan Fashion'))
+
+@section('content')
+<div class="order-success-page-area py-5 bg-light">
+    <div class="container">
+        <div class="card border-0 shadow rounded-lg p-4 p-md-5 bg-white mx-auto" style="max-width: 850px;">
+            <!-- Celebration Banner -->
+            <div class="text-center mb-4 pb-3 border-bottom">
+                <div class="success-icon mb-3">
+                    <span class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fa fa-check fa-3x"></i>
+                    </span>
+                </div>
+                <h2 class="font-weight-bold text-dark mb-1">অর্ডার সফলভাবে সম্পন্ন হয়েছে!</h2>
+                <p class="text-muted">ধন্যবাদ, আপনার অর্ডারটি আমাদের ডাটাবেজে সংরক্ষিত হয়েছে। আমাদের প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবেন।</p>
+                <div class="order-badge mt-3">
+                    <span class="badge badge-light border p-2 text-dark font-weight-bold" style="font-size: 15px;">
+                        অর্ডার নম্বর: <strong class="text-primary">{{ $order->order_number }}</strong>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Customer & Delivery Info Grid -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="p-3 rounded bg-light border h-100">
+                        <h6 class="font-weight-bold text-dark mb-2"><i class="fa fa-user mr-1 text-primary"></i> কাস্টমার তথ্য:</h6>
+                        <p class="m-0 text-muted small"><strong>নাম:</strong> {{ $order->customer_name }}</p>
+                        <p class="m-0 text-muted small"><strong>ফোন নম্বর:</strong> {{ $order->phone }}</p>
+                        @if($order->alt_phone)
+                            <p class="m-0 text-muted small"><strong>বিকল্প ফোন:</strong> {{ $order->alt_phone }}</p>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-3 rounded bg-light border h-100">
+                        <h6 class="font-weight-bold text-dark mb-2"><i class="fa fa-truck mr-1 text-primary"></i> ডেলিভারি ঠিকানা:</h6>
+                        <p class="m-0 text-muted small"><strong>ঠিকানা:</strong> {{ $order->address }}</p>
+                        <p class="m-0 text-muted small"><strong>জেলা / এরিয়া:</strong> {{ $order->district }} @if($order->upazila) ({{ $order->upazila }}) @endif</p>
+                        <p class="m-0 text-muted small"><strong>পেমেন্ট মেথড:</strong> <span class="badge badge-info">{{ $order->payment_method }}</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items Table -->
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered align-middle">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>পণ্য</th>
+                            <th class="text-center">মূল্য</th>
+                            <th class="text-center">পরিমাণ</th>
+                            <th class="text-right">মোট</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($order->items as $item)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ asset($item->product_image ?? 'assets/ecommerce/dist/images/default.png') }}" class="rounded mr-2 border" width="40" height="40" style="object-fit: cover;">
+                                        <div>
+                                            <span class="font-weight-bold text-dark">{{ $item->product_name }}</span>
+                                            @if($item->variant_name)
+                                                <br><small class="text-muted">সাইজ: {{ $item->variant_name }}</small>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center text-dark">{{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($item->price) }}</td>
+                                <td class="text-center font-weight-bold text-dark">{{ $item->quantity }}</td>
+                                <td class="text-right font-weight-bold text-dark">{{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($item->subtotal) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" class="text-right">সাবটোটাল:</th>
+                            <th class="text-right">{{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($order->subtotal) }}</th>
+                        </tr>
+                        @if($order->discount > 0)
+                            <tr>
+                                <th colspan="3" class="text-right text-success">ডিসকাউন্ট:</th>
+                                <th class="text-right text-success">- {{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($order->discount) }}</th>
+                            </tr>
+                        @endif
+                        <tr>
+                            <th colspan="3" class="text-right">ডেলিভারি চার্জ:</th>
+                            <th class="text-right">{{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($order->shipping_cost) }}</th>
+                        </tr>
+                        <tr class="bg-light">
+                            <th colspan="3" class="text-right font-weight-bold text-danger h5 m-0">সর্বমোট প্রদেয় টাকা:</th>
+                            <th class="text-right font-weight-bold text-danger h5 m-0">{{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($order->grand_total) }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between align-items-center pt-3 border-top no-print">
+                <a href="{{ url('/') }}" class="btn btn-outline-secondary"><i class="fa fa-arrow-left mr-1"></i> হোম পেজে ফিরে যান</a>
+                <!-- <button type="button" class="btn btn-dark" onclick="window.print()"><i class="fa fa-print mr-1"></i> ইনভয়েস প্রিন্ট করুন</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media print {
+        .no-print, header, footer, .main-slider-area, .breadcrumb {
+            display: none !important;
+        }
+        body {
+            background: #fff !important;
+        }
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+    }
+</style>
+@endsection

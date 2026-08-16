@@ -1,0 +1,40 @@
+{
+    "name": "miswan/fashion-ecommerce",
+    "type": "project",
+    "description": "Miswan Fashion Full-Stack Laravel E-Commerce Application",
+    "keywords": ["laravel", "ecommerce", "miswanfashion"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.2|^8.3|^8.4|^8.5",
+        "laravel/framework": "^11.0|^12.0|^13.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
