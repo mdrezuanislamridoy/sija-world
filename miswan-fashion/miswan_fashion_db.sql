@@ -422,7 +422,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES (1,'Sija World','Sija World | Bangladesh’s Leading Fashion Brand','https://www.sijaworld.com/core/public/storage/images/l4WGlogo.png','/uploads/image_directory/site/685ed7e04a0218.78429304.png','+8801700000000','support@miswanfashion.com','House #12, Road #5, Dhanmondi, Dhaka, Bangladesh','TK',60.00,120.00,'https://www.facebook.com/p/Miswan-Fashion-61550113106815/',NULL,NULL,'Upto 50% Discount on selected product. Ending Soon.','2026-08-15 14:27:10','2026-08-15 14:27:10');
+INSERT INTO `settings` VALUES (1,'Sija World','Sija World | Bangladesh’s Leading Fashion Brand','assets/images/logo.png','assets/images/logo.png','+8801700000000','support@miswanfashion.com','House #12, Road #5, Dhanmondi, Dhaka, Bangladesh','TK',60.00,120.00,'https://www.facebook.com/p/Miswan-Fashion-61550113106815/',NULL,NULL,'Upto 50% Discount on selected product. Ending Soon.','2026-08-15 14:27:10','2026-08-15 14:27:10');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 DROP TABLE IF EXISTS `sliders`;
