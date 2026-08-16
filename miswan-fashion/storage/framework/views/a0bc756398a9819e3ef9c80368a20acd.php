@@ -47,10 +47,7 @@
     <!-- Footer -->
     <?php echo $__env->make('layouts.partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    <!-- Floating WhatsApp Support Button -->
-    <a href="https://wa.me/<?php echo e(preg_replace('/[^0-9]/', '', $globalSetting->whatsapp_number ?? '+8801700000000')); ?>" target="_blank" class="floating-whatsapp-btn" title="Chat on WhatsApp">
-        <i class="fa fa-whatsapp"></i>
-    </a>
+
 
     <!-- Mobile Bottom Navigation Bar -->
     <div class="mobile-bottom-nav d-md-none">
