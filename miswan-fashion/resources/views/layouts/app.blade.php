@@ -47,10 +47,7 @@
     <!-- Footer -->
     @include('layouts.partials.footer')
 
-    <!-- Floating WhatsApp Support Button -->
-    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $globalSetting->whatsapp_number ?? '+8801700000000') }}" target="_blank" class="floating-whatsapp-btn" title="Chat on WhatsApp">
-        <i class="fa fa-whatsapp"></i>
-    </a>
+
 
     <!-- Mobile Bottom Navigation Bar -->
     <div class="mobile-bottom-nav d-md-none">
