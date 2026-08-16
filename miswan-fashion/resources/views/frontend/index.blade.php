@@ -12,10 +12,46 @@
             <div class="main-slider-area h-100">
                 <div id="heroCarousel" class="owl-carousel owl-theme hero-slider h-100 rounded-lg overflow-hidden shadow-sm" style="border-radius: 12px !important;">
                     @foreach($sliders as $slider)
-                        <div class="item h-100">
+                        <div class="item h-100 position-relative">
                             <a href="{{ $slider->link ?? url('/') }}" class="d-block h-100">
                                 <img src="{{ asset($slider->image) }}" class="d-block w-100 img-fluid" style="height: 420px; object-fit: cover;" alt="{{ $slider->title ?? 'Banner' }}">
                             </a>
+
+                            <!-- Dynamic Product Purchase Overlay on Hero Slider -->
+                            @if($slider->product || $slider->title || $slider->subtitle)
+                                <div class="carousel-caption-overlay position-absolute p-3 p-md-4 rounded-lg shadow-lg text-white" style="left: 20px; bottom: 20px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); max-width: 440px; text-align: left; border: 1px solid rgba(255,255,255,0.15); z-index: 10;">
+                                    @if($slider->title)
+                                        <h4 class="font-weight-bold mb-1 text-warning" style="font-size: 20px;">{{ $slider->title }}</h4>
+                                    @endif
+                                    @if($slider->subtitle)
+                                        <p class="small mb-2 text-light">{{ $slider->subtitle }}</p>
+                                    @endif
+
+                                    @if($slider->product)
+                                        <div class="d-flex align-items-center justify-content-between pt-2 border-top border-secondary mt-2">
+                                            <div>
+                                                <span class="d-block text-truncate font-weight-bold text-white" style="max-width: 200px; font-size: 14px;">{{ $slider->product->name }}</span>
+                                                <span class="text-warning font-weight-bold" style="font-size: 16px;">
+                                                    {{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($slider->product->price) }}
+                                                </span>
+                                                @if($slider->product->previous_price && $slider->product->previous_price > $slider->product->price)
+                                                    <small class="text-muted text-decoration-line-through ml-1"><del>{{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($slider->product->previous_price) }}</del></small>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <a href="{{ route('product.show', ['slug' => $slider->product->slug, 'id' => $slider->product->id]) }}" class="btn btn-sm btn-outline-light font-weight-bold mr-1">View</a>
+                                                <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark ajax-add-to-cart" data-product-id="{{ $slider->product->id }}">
+                                                    <i class="fa fa-shopping-bag mr-1"></i> {{ $slider->button_text ?? 'Buy Now' }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @elseif($slider->link)
+                                        <a href="{{ $slider->link }}" class="btn btn-sm btn-warning font-weight-bold text-dark mt-2">
+                                            {{ $slider->button_text ?? 'Shop Now' }} <i class="fa fa-arrow-right ml-1"></i>
+                                        </a>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -26,11 +62,39 @@
         <!-- Side Banners (Right) -->
         <div class="col-lg-4 d-none d-lg-block">
             <div class="d-flex flex-column justify-content-between h-100">
-                @if(isset($middleBanners) && $middleBanners->count() > 0)
-                    @foreach($middleBanners->take(2) as $index => $banner)
-                    <a href="{{ $banner->link ?? url('/') }}" class="d-block rounded-lg overflow-hidden shadow-sm position-relative {{ $index === 0 ? 'mb-3' : '' }} promo-hover-zoom" style="border-radius: 12px !important;">
-                        <img src="{{ asset($banner->image) }}" alt="{{ $banner->title ?? 'Promo' }}" class="img-fluid w-100" style="height: 202px; object-fit: cover; transition: transform 0.4s ease;">
-                    </a>
+                @php
+                    $activeSideBanners = (isset($topBanners) && $topBanners->count() > 0) ? $topBanners : ((isset($middleBanners) && $middleBanners->count() > 0) ? $middleBanners->take(2) : collect([]));
+                @endphp
+                @if($activeSideBanners->count() > 0)
+                    @foreach($activeSideBanners->take(2) as $index => $banner)
+                    <div class="position-relative rounded-lg overflow-hidden shadow-sm {{ $index === 0 ? 'mb-3' : '' }} promo-hover-zoom" style="border-radius: 12px !important; height: 202px;">
+                        <a href="{{ $banner->link ?? url('/') }}" class="d-block h-100">
+                            <img src="{{ asset($banner->image) }}" alt="{{ $banner->title ?? 'Promo' }}" class="img-fluid w-100 h-100" style="object-fit: cover; transition: transform 0.4s ease;">
+                        </a>
+
+                        <!-- Banner Product Overlay -->
+                        @if($banner->product || $banner->title)
+                            <div class="position-absolute p-2 p-md-3 rounded-lg text-white shadow" style="bottom: 12px; left: 12px; right: 12px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px);">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="overflow-hidden mr-2">
+                                        <strong class="d-block text-truncate text-warning" style="font-size: 13px;">{{ $banner->title ?? ($banner->product ? $banner->product->name : '') }}</strong>
+                                        @if($banner->product)
+                                            <span class="small font-weight-bold text-white">TK {{ number_format($banner->product->price) }}</span>
+                                        @endif
+                                    </div>
+                                    @if($banner->product)
+                                        <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark px-2 py-1 ajax-add-to-cart" style="font-size: 12px;" data-product-id="{{ $banner->product->id }}">
+                                            <i class="fa fa-shopping-cart"></i> {{ $banner->button_text ?? 'Buy' }}
+                                        </button>
+                                    @else
+                                        <a href="{{ $banner->link ?? url('/') }}" class="btn btn-sm btn-light font-weight-bold px-2 py-1" style="font-size: 12px;">
+                                            {{ $banner->button_text ?? 'View' }}
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                     @endforeach
                 @else
                     <!-- Fallback placeholder if no banners exist -->
@@ -125,9 +189,38 @@
             <div class="row">
                 @foreach($middleBanners as $banner)
                     <div class="col-md-6 mb-3">
-                        <a href="{{ $banner->link ?? url('/') }}" class="d-block overflow-hidden rounded shadow-sm">
-                            <img src="{{ asset($banner->image) }}" class="img-fluid w-100" style="transition: transform 0.4s; object-fit: cover;" alt="{{ $banner->title ?? 'Promo Banner' }}">
-                        </a>
+                        <div class="position-relative overflow-hidden rounded-lg shadow-sm promo-hover-zoom" style="border-radius: 12px !important; min-height: 180px;">
+                            <a href="{{ $banner->link ?? url('/') }}" class="d-block">
+                                <img src="{{ asset($banner->image) }}" class="img-fluid w-100" style="transition: transform 0.4s; object-fit: cover; height: 220px;" alt="{{ $banner->title ?? 'Promo Banner' }}">
+                            </a>
+
+                            @if($banner->product || $banner->title)
+                                <div class="position-absolute p-3 rounded-lg text-white shadow-lg" style="bottom: 15px; left: 15px; right: 15px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="m-0 font-weight-bold text-warning" style="font-size: 16px;">{{ $banner->title ?? ($banner->product ? $banner->product->name : 'Special Offer') }}</h5>
+                                            @if($banner->subtitle)
+                                                <small class="text-light d-block">{{ $banner->subtitle }}</small>
+                                            @endif
+                                            @if($banner->product)
+                                                <span class="text-white font-weight-bold mt-1 d-inline-block" style="font-size: 15px;">TK {{ number_format($banner->product->price) }}</span>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            @if($banner->product)
+                                                <button type="button" class="btn btn-warning btn-sm font-weight-bold text-dark px-3 ajax-add-to-cart" data-product-id="{{ $banner->product->id }}">
+                                                    <i class="fa fa-shopping-bag mr-1"></i> {{ $banner->button_text ?? 'Buy Now' }}
+                                                </button>
+                                            @else
+                                                <a href="{{ $banner->link ?? url('/') }}" class="btn btn-light btn-sm font-weight-bold px-3">
+                                                    {{ $banner->button_text ?? 'Shop Collection' }} <i class="fa fa-arrow-right ml-1"></i>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -155,7 +248,7 @@
                                         @endif
                                     </div>
                                     <h2 class="title text-center text-dark font-weight-bold text-truncate m-0 mb-1" style="font-size: 14px;">{{ $prod->name }}</h2>
-                                    
+
                                     <div class="price price-center text-center mb-2">
                                         <span class="price-sign text-primary font-weight-bold">{{ $globalSetting->currency_symbol ?? 'TK' }} {{ number_format($prod->price) }}</span>
                                         @if($prod->previous_price && $prod->previous_price > $prod->price)

@@ -16,9 +16,22 @@ http://127.0.0.1:8000
 # Start server manually (if stopped)
 php artisan serve --port=8000
 
-# Re-run migrations and seeders on MySQL
-php artisan migrate:fresh --seed
+# Re-run migrations
+php artisan migrate
 ```
+
+---
+
+## 🎨 Dynamic Purchasable Banners & Sliders Feature
+
+- **Admin Management (`/admin/sliders`)**:
+  - Dual-tab management for **Hero Carousel Sliders** and **Promotional Banners** (Side Top & Middle Section).
+  - Admin can upload custom banner images, add custom titles/taglines, specify sort order, and **delete** banners/sliders.
+  - **Product Linking**: Admin can optionally associate any banner with a specific product in the store catalog.
+
+- **Interactive Homepage Banners**:
+  - Banners linked to products automatically render an interactive overlay with the product name, price tag (`TK XX,XXX`), and instant **"Buy Now" / "Add to Cart"** button.
+  - Clicking the banner or purchase button allows customers to buy items directly from the banner!
 
 ---
 
@@ -42,16 +55,16 @@ php artisan migrate:fresh --seed
 miswan-fashion/
 ├── app/
 │   ├── Http/Controllers/ (Admin, Cart, Checkout, Auth, Product, User, Home)
-│   ├── Models/ (User, Admin, Product, Category, Order, OrderItem, Slider, Setting, etc.)
+│   ├── Models/ (User, Admin, Product, Category, Order, OrderItem, Slider, Banner, Setting, etc.)
 │   └── Providers/
 ├── bootstrap/
 ├── config/
 ├── database/
-│   ├── migrations/ (10 MySQL Migrations)
+│   ├── migrations/ (11 MySQL Migrations including banners product_id migration)
 │   └── seeders/ (Miswan Fashion Real Seeders)
 ├── public/
 │   ├── assets/ (Fonts, CSS, JS, Images, SVGs)
-│   ├── uploads/ (Product & Category Images)
+│   ├── uploads/ (Product, Category & Banner Images)
 │   ├── index.php
 │   └── .htaccess
 ├── resources/

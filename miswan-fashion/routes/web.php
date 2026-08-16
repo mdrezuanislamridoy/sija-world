@@ -102,6 +102,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/sliders', [AdminSliderController::class, 'index'])->name('sliders.index');
         Route::post('/sliders', [AdminSliderController::class, 'storeSlider'])->name('sliders.store');
         Route::delete('/sliders/{id}', [AdminSliderController::class, 'destroySlider'])->name('sliders.destroy');
+        Route::post('/banners', [AdminSliderController::class, 'storeBanner'])->name('banners.store');
+        Route::delete('/banners/{id}', [AdminSliderController::class, 'destroyBanner'])->name('banners.destroy');
 
         // General Settings
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
